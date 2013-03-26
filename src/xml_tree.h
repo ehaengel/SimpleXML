@@ -28,12 +28,15 @@ private:
 	XML_Tag* start_tag;
 	XML_Tag* end_tag;
 
-	//The data for if this is a content node
-	string content_string;
+	//The content of this node
+	vector<XML_Content> node_content;
 
 	//The tree structure
 	XML_TreeNode* parent;
 	vector<XML_TreeNode*> children;
+
+	XML_TreeNode* next_sibling;
+	XML_TreeNode* prev_sibling;
 };
 
 #endif
