@@ -2,6 +2,7 @@ all: clean main
 
 all_objects:
 	g++ src/xml_tag.cpp -c -o xml_tag.o
+	g++ src/xml_document.cpp -c -o xml_document.o
 
 main: all_objects
 	g++ src/main.cpp -o main *.o
