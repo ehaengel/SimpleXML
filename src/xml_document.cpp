@@ -6,8 +6,8 @@ XML_Document::XML_Document() {
 
 XML_Document::~XML_Document() {
 	for(unsigned int i=0; i<document_content.size(); i++)
-		if(document_content[i].content_tag != NULL)
-			delete document_content[i].content_tag;
+		if(document_content[i].GetContentTag() != NULL)
+			delete document_content[i].GetContentTag();
 
 	document_content.clear();
 }
@@ -28,10 +28,11 @@ int XML_Document::LoadFromFile(FILE* handle) {
 			//First clear out the content string
 			if(content_string != "") {
 				XML_Content new_content;
-				new_content.content_string = content_string;
-				new_content.content_tag = NULL;
-
-				document_content.push_back(new_content);
+				new_content.SetContentString(content_string, true);
+				//new_content.content_string = content_string;
+				
+				if(new_content.GetContentString() != "")
+					document_content.push_back(new_content);
 
 				content_string = "";
 			}
@@ -45,8 +46,7 @@ int XML_Document::LoadFromFile(FILE* handle) {
 			}
 
 			XML_Content new_content;
-			new_content.content_string = "";
-			new_content.content_tag = tag;
+			new_content.SetContentTag(tag);
 
 			document_content.push_back(new_content);
 		}
@@ -57,12 +57,11 @@ int XML_Document::LoadFromFile(FILE* handle) {
 	//Save any remaining content
 	if(content_string != "") {
 		XML_Content new_content;
-		new_content.content_string = content_string;
-		new_content.content_tag = NULL;
+		new_content.SetContentString(content_string, true);
+		//new_content.content_string = content_string;
 
-		document_content.push_back(new_content);
-
-		content_string = "";
+		if(new_content.GetContentString() != "")
+			document_content.push_back(new_content);
 	}
 
 	return true;

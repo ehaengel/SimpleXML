@@ -16,9 +16,8 @@ int main(int argc, char** argv) {
 	XML_Document doc;
 	doc.LoadFromFile(argv[1]);
 
-	for(unsigned int i=0; i<doc.GetContentCount(); i++) {
+	for(unsigned int i=0; i<doc.GetContentCount(); i++)
 		doc.GetContent(i).print_content();
-	}
 
 	return 0;
 }

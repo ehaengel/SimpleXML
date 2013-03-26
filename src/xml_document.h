@@ -6,31 +6,11 @@
 using namespace std;
 
 #include "xml_tag.h"
+#include "xml_content.h"
+#include "xml_tree.h"
 
 #ifndef XML_DOCUMENT
 #define XML_DOCUMENT
-
-struct XML_Content {
-	XML_Content() {
-		content_string = "";
-		content_tag = NULL;
-	}
-
-	int print_content() {
-		if(content_tag == NULL)
-			printf("content: \"%s\"\n\n", content_string.c_str());
-
-		else {
-			content_tag->PrintTagInfo();
-			printf("\n");
-		}
-
-		return true;
-	}
-
-	string content_string;
-	XML_Tag* content_tag;
-};
 
 class XML_Document {
 public:
