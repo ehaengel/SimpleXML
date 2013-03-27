@@ -45,22 +45,22 @@ public:
 	int SetEndTag(XML_Tag* end_tag);
 	XML_Tag* GetEndTag();
 
-	//Modify the parent/child tags
-	int SetParentTag(XML_Tag* parent_tag);
-	XML_Tag* GetParentTag();
+	//Modify the parent/child nodes
+	int SetParentNode(XML_TreeNode* parent);
+	XML_TreeNode* GetParentNode();
 
-	int SetChildrenTags(vector<XML_Tag*> children_tags);
-	int AddChildTag(XML_Tag* child_tag);
+	int SetChildrenNodes(vector<XML_TreeNode*> children);
+	int AddChildNode(XML_TreeNode* child);
 
-	unsigned int GetChildrenTagCount();
-	XML_Tag* GetChildTag(unsigned int index);
+	unsigned int GetChildrenNodeCount();
+	XML_TreeNode* GetChildNode(unsigned int index);
 
 	//Modify the siblings
-	int SetNextSibling(XML_Tag* next_sibling_tag);
-	XML_Tag* GetNextSibling();
+	int SetNextSibling(XML_TreeNode* next_sibling);
+	XML_TreeNode* GetNextSibling();
 
-	int SetPrevSibling(XML_Tag* prev_sibling_tag);
-	XML_Tag* GetPrevSibling();
+	int SetPrevSibling(XML_TreeNode* prev_sibling);
+	XML_TreeNode* GetPrevSibling();
 
 private:
 	//The data for if this is a tag node
