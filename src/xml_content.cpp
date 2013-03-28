@@ -60,7 +60,7 @@ string XML_Content::trim_whitespace(string str) {
 	const char* buf = str.c_str();
 
 	char* p1 = (char*) buf;
-	while(*p1 && (*p1 == ' ' || *p1 == '\n'))
+	while(*p1 && (*p1 == ' ' || *p1 == '\n' || *p1 == '\t'))
 		p1++;
 
 	char* p2 = (char*) buf;
@@ -68,7 +68,7 @@ string XML_Content::trim_whitespace(string str) {
 		p2++;
 	p2--;
 
-	while(p2 > p1 && (*p2 == ' ' || *p2 == '\n'))
+	while(p2 > p1 && (*p2 == ' ' || *p2 == '\n' || *p2 == '\t'))
 		p2--;
 
 	char* p = p1;

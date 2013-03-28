@@ -88,7 +88,7 @@ int XML_Tag::ParseTagString(string tag_string) {
 		return false;
 
 	tag_name = "";
-	while(*p && *p != ' ' && *p != '\n' && *p != '/' && *p != '>') {
+	while(*p && *p != ' ' && *p != '\n' && *p !='\t' && *p != '/' && *p != '>') {
 		tag_name += *p;
 		p++;
 	}
@@ -96,7 +96,7 @@ int XML_Tag::ParseTagString(string tag_string) {
 	//If this is a closed tag, the tag should be over now
 	if(tag_type == XML_Tag::CLOSE_TAG) {
 		//Clear out any whitespace
-		while(*p && (*p == ' ' || *p == '\n'))
+		while(*p && (*p == ' ' || *p == '\n' || *p == '\t'))
 			p++;
 
 		if(*p != '>')
@@ -113,19 +113,19 @@ int XML_Tag::ParseTagString(string tag_string) {
 			found_attribute = false;
 
 			//Clear out any white space
-			while(*p && (*p == ' ' || *p == '\n'))
+			while(*p && (*p == ' ' || *p == '\n' || *p == '\t'))
 				p++;
 
 			if(isalpha(*p) != 0) {
 				string attribute_name = "";
 
-				while(*p && *p != ' ' && *p != '\n' && *p != '=' && *p != '/' && *p != '>') {
+				while(*p && *p != ' ' && *p != '\n' && *p != '\t' && *p != '=' && *p != '/' && *p != '>') {
 					attribute_name += *p;
 					p++;
 				}
 
 				//Clear out any white space
-				while(*p && (*p == ' ' || *p == '\n'))
+				while(*p && (*p == ' ' || *p == '\n' || *p == '\t'))
 					p++;
 
 				//Jump past the equal sign
@@ -135,7 +135,7 @@ int XML_Tag::ParseTagString(string tag_string) {
 				p++;
 
 				//Clear out any white space
-				while(*p && (*p == ' ' || *p == '\n'))
+				while(*p && (*p == ' ' || *p == '\n' || *p == '\t'))
 					p++;
 
 				string attribute_value = "";
@@ -152,7 +152,7 @@ int XML_Tag::ParseTagString(string tag_string) {
 					p++;
 				}
 				else {
-					while(*p && *p != ' ' && *p != '\n' && *p != '/' && *p != '>') {
+					while(*p && *p != ' ' && *p != '\n' && *p != '\t' && *p != '/' && *p != '>') {
 						attribute_value += *p;
 						p++;
 					}
@@ -169,7 +169,7 @@ int XML_Tag::ParseTagString(string tag_string) {
 	}
 
 	//Clear out any whitespace
-	while(*p && (*p == ' ' || *p == '\n'))
+	while(*p && (*p == ' ' || *p == '\n' || *p == '\t'))
 		p++;
 
 	//Figure out what kind of tag this is
