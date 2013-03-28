@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 #include <string>
@@ -61,6 +62,13 @@ public:
 
 	int SetPrevSibling(XML_TreeNode* prev_sibling);
 	XML_TreeNode* GetPrevSibling();
+
+	/////////////////////////
+	// Debugging functions //
+	/////////////////////////
+
+	int WriteDotFile(const char* filename);
+	int WriteDotFile(FILE* handle);
 
 private:
 	//The data for if this is a tag node

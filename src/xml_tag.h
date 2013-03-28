@@ -58,6 +58,7 @@ public:
 
 	// Enumeration of tag types
 	enum {
+		UNDEF_TAG,
 		OPEN_TAG,
 		CLOSE_TAG,
 		OPENCLOSE_TAG

@@ -2,6 +2,8 @@
 
 XML_Document::XML_Document() {
 	document_content.clear();
+
+	head_node = NULL;
 }
 
 XML_Document::~XML_Document() {
@@ -10,6 +12,9 @@ XML_Document::~XML_Document() {
 			delete document_content[i].GetContentTag();
 
 	document_content.clear();
+
+	if(head_node != NULL)
+		delete head_node;
 }
 
 ////////////////////////////////
@@ -103,4 +108,37 @@ unsigned int XML_Document::GetContentCount() {
 
 XML_Content XML_Document::GetContent(unsigned int index) {
 	return document_content[index];
+}
+
+/////////////////////////////////
+// XML document tree functions //
+/////////////////////////////////
+
+int XML_Document::CreateDocumentTree() {
+	head_node = new XML_TreeNode;
+
+	head_node->SetNodeContent(document_content);
+	if(head_node->ParseContent() == false) {
+		delete head_node;
+		head_node = NULL;
+		return false;
+	}
+
+	//printf("Number of children nodes: %u\n", head_node->GetChildrenNodeCount());
+
+	return true;
+}
+
+/////////////////////////
+// Debugging functions //
+/////////////////////////
+
+int XML_Document::WriteDotFile(const char* filename) {
+	if(head_node == NULL)
+		return false;
+
+	if(head_node->WriteDotFile(filename) == false)
+		return false;
+
+	return true;
 }

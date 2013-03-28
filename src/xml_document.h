@@ -34,9 +34,24 @@ public:
 	unsigned int GetContentCount();
 	XML_Content GetContent(unsigned int index);
 
+	/////////////////////////////////
+	// XML document tree functions //
+	/////////////////////////////////
+
+	int CreateDocumentTree();
+
+	/////////////////////////
+	// Debugging functions //
+	/////////////////////////
+
+	int WriteDotFile(const char* filename);
+
 private:
 	//The data describing this document
 	vector<XML_Content> document_content;
+
+	//The data describing the document tree
+	XML_TreeNode* head_node;
 };
 
 #endif

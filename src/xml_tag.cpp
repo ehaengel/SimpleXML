@@ -1,6 +1,12 @@
 #include "xml_tag.h"
 
 XML_Tag::XML_Tag() {
+	tag_string = "";
+
+	tag_name = "";
+	tag_type = XML_Tag::UNDEF_TAG;
+
+	tag_attributes.clear();
 }
 
 XML_Tag::~XML_Tag() {
@@ -38,7 +44,7 @@ int XML_Tag::LoadFromFile(FILE* handle, bool skip_open_bracket) {
 
 	buf += p;
 
-	printf("tag: %s\n", buf.c_str());
+	//printf("tag: %s\n", buf.c_str());
 	return ParseTagString(buf);
 }
 
@@ -171,7 +177,7 @@ int XML_Tag::ParseTagString(string tag_string) {
 		tag_type = XML_Tag::OPENCLOSE_TAG;
 
 	else if(*p == '>')
-		tag_type == XML_Tag::OPEN_TAG;
+		tag_type = XML_Tag::OPEN_TAG;
 
 	else
 		return false;
