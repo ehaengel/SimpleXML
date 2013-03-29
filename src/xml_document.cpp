@@ -4,6 +4,7 @@ XML_Document::XML_Document() {
 	document_content.clear();
 
 	head_node = NULL;
+	CreateDocumentTree();
 }
 
 XML_Document::~XML_Document() {
@@ -69,6 +70,10 @@ int XML_Document::LoadFromFile(FILE* handle) {
 			document_content.push_back(new_content);
 	}
 
+	//Attempt to create the document tree
+	if(CreateDocumentTree() == false)
+		return false;
+
 	return true;
 }
 
@@ -84,6 +89,9 @@ int XML_Document::LoadFromFile(const char* filename) {
 }
 
 int XML_Document::WriteToFile(FILE* handle) {
+	if(head_node->WriteToFile(handle) == false)
+		return false;
+
 	return true;
 }
 
@@ -92,7 +100,7 @@ int XML_Document::WriteToFile(const char* filename) {
 	if(!handle)
 		return false;
 
-	int ret = LoadFromFile(handle);
+	int ret = WriteToFile(handle);
 
 	fclose(handle);
 	return ret;

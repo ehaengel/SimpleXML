@@ -31,6 +31,9 @@ public:
 	int LoadFromFile(FILE* handle, bool skip_open_bracket);
 	int LoadFromFile(const char* filename);
 
+	int WriteToFile(FILE* handle);
+	int WriteToFile(const char* filename);
+
 	///////////////////////////
 	// Tag parsing functions //
 	///////////////////////////
@@ -41,10 +44,21 @@ public:
 	// Tag information functions //
 	///////////////////////////////
 
+	int SetTagString(string tag_string);
 	string GetTagString();
 
+	int SetTagName(string tag_name);
 	string GetTagName();
+
+	int SetTagType(int tag_type);
 	int GetTagType();
+
+	int AppendTagAttribute(XML_TagAttribute tag_attribute);
+	int AppendTagAttribute(string attribute_name, string attribute_value);
+	int AppendTagAttribute(string attribute_name, double attribute_value);
+	int AppendTagAttribute(string attribute_name, int attribute_value);
+
+	int RemoveTagAttritube(unsigned int index);
 
 	unsigned int GetAttributeCount();
 	XML_TagAttribute GetAttribute(unsigned int index);
@@ -65,6 +79,9 @@ public:
 	};
 
 private:
+	//Internal use functions
+	int update_tag_string();
+
 	//Tag data
 	string tag_string;
 

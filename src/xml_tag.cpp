@@ -59,6 +59,23 @@ int XML_Tag::LoadFromFile(const char* filename) {
 	return ret;
 }
 
+int XML_Tag::WriteToFile(FILE* handle) {
+	fprintf(handle, "%s\n", tag_string.c_str());
+
+	return true;
+}
+
+int XML_Tag::WriteToFile(const char* filename) {
+	FILE* handle = fopen(filename, "w");
+	if(!handle)
+		return false;
+
+	int ret = LoadFromFile(handle, false);
+
+	fclose(handle);
+	return ret;
+}
+
 ///////////////////////////
 // Tag parsing functions //
 ///////////////////////////
@@ -182,24 +199,83 @@ int XML_Tag::ParseTagString(string tag_string) {
 	else
 		return false;
 
-	this->tag_string = tag_string;
-	return true;
+	return update_tag_string();
 }
 
 ///////////////////////////////
 // Tag information functions //
 ///////////////////////////////
 
+int XML_Tag::SetTagString(string tag_string) {
+	return ParseTagString(tag_string);
+}
+
 string XML_Tag::GetTagString() {
 	return tag_string;
+}
+
+int XML_Tag::SetTagName(string tag_name) {
+	this->tag_name = tag_name;
+
+	return update_tag_string();
 }
 
 string XML_Tag::GetTagName() {
 	return tag_name;
 }
 
+int XML_Tag::SetTagType(int tag_type) {
+	this->tag_type = tag_type;
+
+	return update_tag_string();
+}
+
 int XML_Tag::GetTagType() {
 	return tag_type;
+}
+
+int XML_Tag::AppendTagAttribute(XML_TagAttribute tag_attribute) {
+	tag_attributes.push_back(tag_attribute);
+
+	return update_tag_string();
+}
+
+int XML_Tag::AppendTagAttribute(string attribute_name, string attribute_value) {
+	XML_TagAttribute new_attribute;
+	new_attribute.attribute_name = attribute_name;
+	new_attribute.attribute_value = attribute_value;
+
+	return AppendTagAttribute(new_attribute);
+}
+
+int XML_Tag::AppendTagAttribute(string attribute_name, double attribute_value) {
+	XML_TagAttribute new_attribute;
+	new_attribute.attribute_name = attribute_name;
+
+	char buffer[1000];
+	sprintf(buffer, "%f", attribute_value);
+	new_attribute.attribute_value = buffer;
+
+	return AppendTagAttribute(new_attribute);
+}
+
+int XML_Tag::AppendTagAttribute(string attribute_name, int attribute_value) {
+	XML_TagAttribute new_attribute;
+	new_attribute.attribute_name = attribute_name;
+
+	char buffer[1000];
+	sprintf(buffer, "%d", attribute_value);
+	new_attribute.attribute_value = buffer;
+
+	return AppendTagAttribute(new_attribute);
+}
+
+int XML_Tag::RemoveTagAttritube(unsigned int index) {
+	if(index >= tag_attributes.size())
+		return false;
+
+	tag_attributes.erase(tag_attributes.begin() + index);
+	return update_tag_string();
 }
 
 unsigned int XML_Tag::GetAttributeCount() {
@@ -248,4 +324,51 @@ int XML_Tag::PrintTagInfo() {
 	}
 
 	return 0;
+}
+
+//Internal use functions
+int XML_Tag::update_tag_string() {
+	switch(tag_type) {
+		case XML_Tag::OPEN_TAG:
+		case XML_Tag::OPENCLOSE_TAG:
+			tag_string = "<";
+			break;
+
+		case XML_Tag::CLOSE_TAG:
+			tag_string = "</";
+			break;
+
+		default:
+			return false;
+			break;
+	}
+
+	tag_string += tag_name;
+
+	if(tag_type == XML_Tag::CLOSE_TAG)
+		tag_string += ">";
+
+	else {
+		if(tag_attributes.size() > 0) {
+			for(unsigned int i=0; i<GetAttributeCount(); i++) {
+				XML_TagAttribute cur_attribute = GetAttribute(i);
+
+				const char* name = cur_attribute.attribute_name.c_str();
+				const char* value = cur_attribute.attribute_value.c_str();
+
+				char buffer[1000];
+				sprintf(buffer, " %s=\"%s\"", name, value);
+
+				tag_string += buffer;
+			}
+		}
+
+		if(tag_type == XML_Tag::OPEN_TAG)
+			tag_string += ">";
+
+		else if(tag_type == XML_Tag::OPENCLOSE_TAG)
+			tag_string += "/>";
+	}
+
+	return true;
 }

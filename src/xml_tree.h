@@ -17,6 +17,12 @@ public:
 	XML_TreeNode();
 	~XML_TreeNode();
 
+	////////////////////////
+	// File i/o functions //
+	////////////////////////
+
+	int WriteToFile(FILE* handle);
+
 	//////////////////////////////////
 	// Content management functions //
 	//////////////////////////////////
@@ -44,6 +50,10 @@ public:
 	//////////////////////////////////////
 	// Tree structure related functions //
 	//////////////////////////////////////
+
+	//Create a new child from some content
+	XML_TreeNode* CreateChildFromTag(XML_Tag* start_tag, XML_Tag* end_tag);
+	XML_TreeNode* CreateChildFromString(string content_string);
 
 	//Modify the start/end tag
 	int SetStartTag(XML_Tag* start_tag);

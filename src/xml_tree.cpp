@@ -17,7 +17,108 @@ XML_TreeNode::XML_TreeNode() {
 }
 
 XML_TreeNode::~XML_TreeNode() {
-	//Do nothing
+	//Delete all the children and clear the content
+	node_content.clear();
+
+	for(unsigned int i=0; i<GetChildrenNodeCount(); i++) {
+		if(GetChildNode(i) != NULL)
+			delete GetChildNode(i);
+	}
+}
+
+////////////////////////
+// File i/o functions //
+////////////////////////
+
+int XML_TreeNode::WriteToFile(FILE* handle) {
+	//First figure out the depth of this tree node
+	unsigned int node_depth = 0;
+	XML_TreeNode* temp_node = GetParentNode();
+
+	while(temp_node != NULL) {
+		node_depth++;
+		temp_node = temp_node->GetParentNode();
+	}
+
+	//If this is a leaf node
+	if(GetChildrenNodeCount() == 0) {
+		//If this leaf node is just an empty open/close tag pair
+		if(GetStartTag() != GetEndTag() && GetStartTag() != NULL && GetEndTag() != NULL) {
+			//Create some tabbing
+			for(unsigned int i=1; i<node_depth; i++)
+				fprintf(handle, "\t");
+
+			//Print the open tag
+			if(GetStartTag()->WriteToFile(handle) == false)
+				return false;
+
+			//Create some tabbing
+			for(unsigned int i=1; i<node_depth; i++)
+				fprintf(handle, "\t");
+
+			//Print the end tag
+			if(GetEndTag()->WriteToFile(handle) == false)
+				return false;
+		}
+
+		//If this is a open-close tag leaf node
+		else if(GetStartTag() == GetEndTag() && GetStartTag() != NULL) {
+			XML_Tag* cur_tag = GetStartTag();
+
+			//Create some tabbing
+			for(unsigned int i=1; i<node_depth; i++)
+				fprintf(handle, "\t");
+
+			if(cur_tag->WriteToFile(handle) == false)
+				return false;
+		}
+
+		//If this is a content leaf node
+		else {
+			for(unsigned int i=0; i<GetNodeContentCount(); i++) {
+				XML_Content cur_content = GetNodeContent(i);
+
+				//Create some tabbing
+				for(unsigned int i=1; i<node_depth; i++)
+					fprintf(handle, "\t");
+
+				fprintf(handle, "%s\n", cur_content.GetContentString().c_str());
+			}
+		}
+	}
+
+	//This node represents an open/close tag pair
+	else {
+		if(GetStartTag() != NULL) {
+			//Create some tabbing
+			for(unsigned int i=1; i<node_depth; i++)
+				fprintf(handle, "\t");
+
+			//Print the open tag
+			if(GetStartTag()->WriteToFile(handle) == false)
+				return false;
+		}
+
+		//Recursively write the children tags
+		for(unsigned int i=0; i<GetChildrenNodeCount(); i++) {
+			XML_TreeNode* cur_child = GetChildNode(i);
+
+			if(cur_child->WriteToFile(handle) == false)
+				return false;
+		}
+
+		if(GetEndTag() != NULL) {
+			//Create some tabbing
+			for(unsigned int i=1; i<node_depth; i++)
+				fprintf(handle, "\t");
+
+			//Print the close tag
+			if(GetEndTag()->WriteToFile(handle) == false)
+				return false;
+		}
+	}
+
+	return true;
 }
 
 //////////////////////////////////
@@ -46,6 +147,10 @@ XML_Content XML_TreeNode::GetNodeContent(unsigned int index) {
 //Recursively parse the content to create a subtree
 int XML_TreeNode::ParseContent() {
 	//Clear the children
+	for(unsigned int i=0; i<children.size(); i++)
+		if(children[i] != NULL)
+			delete children[i];
+
 	children.clear();
 
 	//printf("Number of content elements: %u\n", node_content.size());
@@ -222,6 +327,68 @@ int XML_TreeNode::GetTreeNodesOfTagName(string tag_name, vector<XML_TreeNode*> &
 // Tree structure related functions //
 //////////////////////////////////////
 
+//Create a new child from some content
+/*XML_TreeNode* XML_TreeNode::CreateChildFromContent(vector<XML_Content> content_items) {
+	XML_TreeNode* new_child = new XML_TreeNode;
+
+	new_child->SetParentNode(this);
+	new_child->SetNodeContent(content_items);
+
+	if(new_child->ParseContent() == true)
+		AddChildNode(new_child);
+
+	else {
+		delete new_child;
+		new_child = NULL;
+	}
+
+	return new_child;
+}*/
+
+XML_TreeNode* XML_TreeNode::CreateChildFromTag(XML_Tag* start_tag, XML_Tag* end_tag) {
+	XML_TreeNode* new_child = new XML_TreeNode;
+
+	new_child->SetParentNode(this);
+	new_child->SetStartTag(start_tag);
+	new_child->SetEndTag(end_tag);
+
+	AddChildNode(new_child);
+
+	if(start_tag == end_tag) {
+		XML_Content new_content;
+
+		new_content.SetContentTag(start_tag);
+		AddNodeContent(new_content);
+	}
+
+	else {
+		XML_Content new_content;
+
+		new_content.SetContentTag(start_tag);
+		AddNodeContent(new_content);
+
+		new_content.SetContentTag(end_tag);
+		AddNodeContent(new_content);
+	}
+
+	return new_child;
+}
+
+XML_TreeNode* XML_TreeNode::CreateChildFromString(string content_string) {
+	XML_TreeNode* new_child = new XML_TreeNode;
+
+	XML_Content new_content;
+	new_content.SetContentString(content_string, true);
+
+	new_child->SetParentNode(this);
+	new_child->AddNodeContent(new_content);
+
+	AddChildNode(new_child);
+	AddNodeContent(new_content);
+
+	return new_child;
+}
+
 //Modify the start/end tag
 int XML_TreeNode::SetStartTag(XML_Tag* start_tag) {
 	this->start_tag = start_tag;
@@ -316,7 +483,7 @@ int XML_TreeNode::WriteDotFile(FILE* handle) {
 	string label = "blank";
 	if(start_tag != NULL && end_tag != NULL) {
 		if(start_tag == end_tag)
-			label = "<" + start_tag->GetTagName() + ">";
+			label = "<" + start_tag->GetTagName() + "/>";
 
 		else
 			label = "<" + start_tag->GetTagName() + ">..</" + end_tag->GetTagName() + ">";
