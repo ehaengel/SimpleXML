@@ -168,6 +168,56 @@ int XML_TreeNode::ParseContent() {
 // Tree search related functions //
 ///////////////////////////////////
 
+//Get all the tags on this node of given tag name
+int XML_TreeNode::GetTagsOfTagName(string tag_name, vector<XML_Tag*> &result) {
+	/*for(unsigned int i=0; i<GetNodeContentCount(); i++) {
+		XML_Content cur_content = GetNodeContent(i);
+
+		if(cur_content.GetContentTag() != NULL) {
+			XML_Tag* cur_content_tag = cur_content.GetContentTag();
+
+			if(strcmp(cur_content_tag->GetTagName().c_str(), tag_name.c_str()) == 0)
+				result.push_back(cur_content_tag);
+		}
+	}*/
+
+	result.clear();
+	for(unsigned int i=0; i<GetChildrenNodeCount(); i++) {
+		XML_TreeNode* cur_child = GetChildNode(i);
+
+		if(cur_child != NULL) {
+			if(cur_child->GetStartTag() != NULL) {
+				XML_Tag* cur_tag = cur_child->GetStartTag();
+
+				if(strcmp(cur_tag->GetTagName().c_str(), tag_name.c_str()) == 0)
+					result.push_back(cur_tag);
+			}
+		}
+	}
+
+	return true;
+}
+
+//Get all the children of this node of tag type and given tag name
+int XML_TreeNode::GetTreeNodesOfTagName(string tag_name, vector<XML_TreeNode*> &result) {
+	result.clear();
+
+	for(unsigned int i=0; i<GetChildrenNodeCount(); i++) {
+		XML_TreeNode* cur_child = GetChildNode(i);
+
+		if(cur_child != NULL) {
+			if(cur_child->GetStartTag() != NULL) {
+				XML_Tag* cur_tag = cur_child->GetStartTag();
+
+				if(strcmp(cur_tag->GetTagName().c_str(), tag_name.c_str()) == 0)
+					result.push_back(cur_child);
+			}
+		}
+	}
+
+	return true;
+}
+
 //////////////////////////////////////
 // Tree structure related functions //
 //////////////////////////////////////

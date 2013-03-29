@@ -35,6 +35,12 @@ public:
 	// Tree search related functions //
 	///////////////////////////////////
 
+	//Get all the tags on this node of given tag name
+	int GetTagsOfTagName(string tag_name, vector<XML_Tag*> &result);
+
+	//Get all the children of this node of tag type and given tag name
+	int GetTreeNodesOfTagName(string tag_name, vector<XML_TreeNode*> &result);
+
 	//////////////////////////////////////
 	// Tree structure related functions //
 	//////////////////////////////////////

@@ -40,6 +40,8 @@ public:
 
 	int CreateDocumentTree();
 
+	XML_TreeNode* GetHeadNode();
+
 	/////////////////////////
 	// Debugging functions //
 	/////////////////////////

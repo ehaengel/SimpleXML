@@ -129,6 +129,10 @@ int XML_Document::CreateDocumentTree() {
 	return true;
 }
 
+XML_TreeNode* XML_Document::GetHeadNode() {
+	return head_node;
+}
+
 /////////////////////////
 // Debugging functions //
 /////////////////////////
