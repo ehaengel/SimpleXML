@@ -5,8 +5,6 @@
 #include "xml_document.h"
 
 int main(int argc, char** argv) {
-	//Blah added this as a test
-
 	/*XML_Tag* tag = new XML_Tag;
 	if(tag->LoadFromFile(argv[1]) == false) {
 		printf("Error loading tag\n");
