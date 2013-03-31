@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <ctype.h>
 
@@ -62,6 +63,10 @@ public:
 
 	unsigned int GetAttributeCount();
 	XML_TagAttribute GetAttribute(unsigned int index);
+
+	string GetAttributeName(unsigned int index);
+	string GetAttributeValue(unsigned int index);
+	string GetAttributeValue(string attribute_name);
 
 	/////////////////////////
 	// Debugging functions //

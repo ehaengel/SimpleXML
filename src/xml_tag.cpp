@@ -286,6 +286,25 @@ XML_TagAttribute XML_Tag::GetAttribute(unsigned int index) {
 	return tag_attributes[index];
 }
 
+string XML_Tag::GetAttributeName(unsigned int index) {
+	return tag_attributes[index].attribute_name;
+}
+
+string XML_Tag::GetAttributeValue(unsigned int index) {
+	return tag_attributes[index].attribute_value;
+}
+
+string XML_Tag::GetAttributeValue(string attribute_name) {
+	for(unsigned int i=0; i<tag_attributes.size(); i++) {
+		const char* name = tag_attributes[i].attribute_name.c_str();
+
+		if(strcmp(name, attribute_name.c_str()) == 0)
+			return tag_attributes[i].attribute_value;
+	}
+
+	return "";
+}
+
 
 /////////////////////////
 // Debugging functions //
