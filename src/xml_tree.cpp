@@ -327,7 +327,6 @@ int XML_TreeNode::GetTreeNodesOfTagName(string tag_name, vector<XML_TreeNode*> &
 // Tree structure related functions //
 //////////////////////////////////////
 
-//Create a new child from some content
 /*XML_TreeNode* XML_TreeNode::CreateChildFromContent(vector<XML_Content> content_items) {
 	XML_TreeNode* new_child = new XML_TreeNode;
 
@@ -345,6 +344,29 @@ int XML_TreeNode::GetTreeNodesOfTagName(string tag_name, vector<XML_TreeNode*> &
 	return new_child;
 }*/
 
+//Create a new child node which is a pair of tags or a single open-close tag
+XML_TreeNode* XML_TreeNode::CreateChildTagPair(string tag_name) {
+	XML_Tag* new_start_tag = new XML_Tag;
+	new_start_tag->SetTagName(tag_name);
+	new_start_tag->SetTagType(XML_Tag::OPEN_TAG);
+
+	XML_Tag* new_end_tag = new XML_Tag;
+	new_end_tag->SetTagName(tag_name);
+	new_end_tag->SetTagType(XML_Tag::CLOSE_TAG);
+
+	return CreateChildFromTag(new_start_tag, new_end_tag);
+}
+
+XML_TreeNode* XML_TreeNode::CreateChildTagOpenClosed(string tag_name) {
+	XML_Tag* new_tag = new XML_Tag;
+
+	new_tag->SetTagName(tag_name);
+	new_tag->SetTagType(XML_Tag::OPENCLOSE_TAG);
+
+	return CreateChildFromTag(new_tag, new_tag);
+}
+
+//Create a new child from some content
 XML_TreeNode* XML_TreeNode::CreateChildFromTag(XML_Tag* start_tag, XML_Tag* end_tag) {
 	XML_TreeNode* new_child = new XML_TreeNode;
 

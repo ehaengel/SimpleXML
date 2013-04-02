@@ -51,6 +51,10 @@ public:
 	// Tree structure related functions //
 	//////////////////////////////////////
 
+	//Create a new child node which is a pair of tags or a single open-close tag
+	XML_TreeNode* CreateChildTagPair(string tag_name);
+	XML_TreeNode* CreateChildTagOpenClosed(string tag_name);
+
 	//Create a new child from some content
 	XML_TreeNode* CreateChildFromTag(XML_Tag* start_tag, XML_Tag* end_tag);
 	XML_TreeNode* CreateChildFromString(string content_string);

@@ -1,4 +1,4 @@
-all: clean main
+all: clean all_objects main
 
 all_objects:
 	g++ src/xml_tag.cpp -c -o xml_tag.o
@@ -8,8 +8,8 @@ all_objects:
 	ar -cr libsimplexml.a *.o
 	rm -f *.o
 
-main: all_objects
+main:
 	g++ src/main.cpp -o main -L. -lsimplexml
 
 clean:
-	rm -f *.o main
+	rm -f libsimplexml.a *.o main
