@@ -259,6 +259,17 @@ int XML_Tag::AppendTagAttribute(string attribute_name, double attribute_value) {
 	return AppendTagAttribute(new_attribute);
 }
 
+int XML_Tag::AppendTagAttribute(string attribute_name, unsigned int attribute_value) {
+	XML_TagAttribute new_attribute;
+	new_attribute.attribute_name = attribute_name;
+
+	char buffer[1000];
+	sprintf(buffer, "%u", attribute_value);
+	new_attribute.attribute_value = buffer;
+
+	return AppendTagAttribute(new_attribute);
+}
+
 int XML_Tag::AppendTagAttribute(string attribute_name, int attribute_value) {
 	XML_TagAttribute new_attribute;
 	new_attribute.attribute_name = attribute_name;

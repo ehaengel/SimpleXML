@@ -57,6 +57,7 @@ public:
 	int AppendTagAttribute(XML_TagAttribute tag_attribute);
 	int AppendTagAttribute(string attribute_name, string attribute_value);
 	int AppendTagAttribute(string attribute_name, double attribute_value);
+	int AppendTagAttribute(string attribute_name, unsigned int attribute_value);
 	int AppendTagAttribute(string attribute_name, int attribute_value);
 
 	int RemoveTagAttritube(unsigned int index);
