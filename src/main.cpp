@@ -7,19 +7,19 @@
 int main(int argc, char** argv) {
 	XML_Document* xml_document = new XML_Document;
 
-	XML_TreeNode* head_node = xml_document->GetHeadNode();
+	xml_document->LoadFromFile(argv[1]);
 
-	XML_TreeNode* trianglelist = head_node->CreateChildTagPair("trianglelist");
+	vector<XML_TreeNode*> result;
+	xml_document->GetHeadNode()->GetTreeNodesOfTagName(string(argv[2]), result);
 
-	for(int i=0; i<10; i++) {
-		XML_TreeNode* new_triangle_node = trianglelist->CreateChildTagOpenClosed("triangle");
+	for(unsigned int i=0; i<result.size(); i++) {
+		XML_Tag* start_tag = result[i]->GetStartTag();
+		if(start_tag != NULL) {
+			printf("%s %u: ", start_tag->GetTagName().c_str(), i);
 
-		XML_Tag* new_triangle_tag = new_triangle_node->GetStartTag();
-		new_triangle_tag->AppendTagAttribute("index", i);
+			printf("%u\n", result[i]->CountTagsOfTagName(string(argv[3])));
+		}
 	}
-
-	xml_document->WriteToFile(argv[1]);
-	xml_document->WriteDotFile(argv[2]);
 
 	return 0;
 }

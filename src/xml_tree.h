@@ -41,6 +41,9 @@ public:
 	// Tree search related functions //
 	///////////////////////////////////
 
+	//Count all the tags on this node of a given tag name
+	unsigned int CountTagsOfTagName(string tag_name);
+
 	//Get all the tags on this node of given tag name
 	int GetTagsOfTagName(string tag_name, vector<XML_Tag*> &result);
 
