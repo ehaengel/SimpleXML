@@ -41,6 +41,12 @@ public:
 	// Tree search related functions //
 	///////////////////////////////////
 
+	//Get all the tags on this node
+	int GetTags(vector<XML_Tag*> &result);
+
+	//Get all the open-close tags on this node
+	int GetOpenCloseTags(vector<XML_Tag*> &result);
+
 	//Count all the tags on this node of a given tag name
 	unsigned int CountTagsOfTagName(string tag_name);
 

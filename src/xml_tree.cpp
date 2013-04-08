@@ -273,6 +273,38 @@ int XML_TreeNode::ParseContent() {
 // Tree search related functions //
 ///////////////////////////////////
 
+//Get all the tags on this node
+int XML_TreeNode::GetTags(vector<XML_Tag*> &result) {
+	for(unsigned int i=0; i<GetChildrenNodeCount(); i++) {
+		XML_TreeNode* cur_child = GetChildNode(i);
+
+		if(cur_child != NULL) {
+			if(cur_child->GetStartTag() != NULL)
+				result.push_back(cur_child->GetStartTag());
+
+			if(cur_child->GetEndTag() != NULL && cur_child->GetEndTag() != cur_child->GetStartTag())
+				result.push_back(cur_child->GetStartTag());
+		}
+	}
+
+	return true;
+}
+
+//Get all the open-close tags on this node
+int XML_TreeNode::GetOpenCloseTags(vector<XML_Tag*> &result) {
+	for(unsigned int i=0; i<GetChildrenNodeCount(); i++) {
+		XML_TreeNode* cur_child = GetChildNode(i);
+
+		if(cur_child != NULL) {
+			if(cur_child->GetStartTag() != NULL && cur_child->GetStartTag() == cur_child->GetEndTag())
+				result.push_back(cur_child->GetStartTag());
+		}
+	}
+
+	return true;
+}
+
+
 //Count all the tags on this node of a given tag name
 unsigned int XML_TreeNode::CountTagsOfTagName(string tag_name) {
 	unsigned int count = 0;
